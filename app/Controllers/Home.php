@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Controllers;
-//use App\Controllers\BaseController;
-//use CodeIgniter\HTTP\ResponseInterface;
+use App\Controllers\BaseController;
+use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\ProductModel;
+
 
 class Home extends BaseController
 {
@@ -11,6 +12,8 @@ class Home extends BaseController
 
     function __construct()
     {
+        helper('form');
+        helper('number');
         $this->product = new ProductModel();
     }
 

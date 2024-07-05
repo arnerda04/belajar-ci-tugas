@@ -94,6 +94,7 @@ class ProdukController extends BaseController
 
         return redirect('produk')->with('success', 'Data Berhasil Dihapus');
     }
+    
     public function download()
     {
         $product = $this->product->findAll();
