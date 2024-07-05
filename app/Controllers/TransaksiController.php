@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\TransactionModel;
-use App\Models\TransasctionDetailModel;
+use App\Models\TransactionDetailModel;
 
 class TransaksiController extends BaseController
 {
