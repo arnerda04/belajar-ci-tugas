@@ -75,7 +75,7 @@ class TransaksiController extends BaseController
         $data['items'] = $this->cart->contents();
         $data['total'] = $this->cart->total();
         $provinsi = $this->rajaongkir('province');
-				$data['provinsi'] = json_decode($provinsi)->rajaongkir->results;
+		$data['provinsi'] = json_decode($provinsi)->rajaongkir->results;
 
         return view('v_checkout', $data);
     }

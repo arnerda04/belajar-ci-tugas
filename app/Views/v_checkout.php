@@ -26,13 +26,13 @@
         <div class="col-12">
             <label for="kabkota" class="form-label">Kab/Kota</label>
             <select class="form-select" id="kabupaten">
-                <option>Silahkan pilih Kab/Kota</option>
+                <option>Silakan pilih kabupaten</option>
             </select>
         </div>
         <div class="col-12">
             <label for="layanan" class="form-label">Layanan</label>
             <select class="form-select" id="service">
-                <option>Silahkan pilih Layanan</option>
+                <option>Silakan pilih layanan</option>
             </select>
         </div>
         <div class="col-12">
@@ -111,7 +111,7 @@
                 },
                 dataType: 'json',
                 success: function(data) {
-                    //console.log(data);
+                    console.log(data);
                     var results = data["rajaongkir"]["results"];
                     for (var i = 0; i < results.length; i++) {
                         $("#kabupaten").append($('<option>', {
@@ -134,7 +134,7 @@
                 url: "<?= site_url('getcost') ?>",
                 type: 'GET',
                 data: {
-                    'origin': 399, //kode kota smg
+                    'origin': 399,
                     'destination': id_city,
                     'weight': 1000,
                     'courier': 'jne'
