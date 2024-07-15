@@ -32,6 +32,31 @@ class ProdukController extends BaseController
 
     public function create()
     {
+        $validationRules = [
+            'nama' => 'required|min_length[6]',
+            'harga' => 'required|numeric',
+            'jumlah' => 'required|numeric'
+        ];
+        $validationMessages = [
+            'nama' => [
+                'required' => 'Nama produk harus diisi.',
+                'min_length' => 'Nama produk harus memiliki minimal 6 karakter.'
+            ],
+            'harga' => [
+                'required' => 'Harga produk harus diisi.',
+                'numeric' => 'Harga produk harus berupa angka.'
+            ],
+            'jumlah' => [
+                'required' => 'Jumlah produk harus diisi.',
+                'numeric' => 'Jumlah produk harus berupa angka.'
+            ]
+        ];
+        if (!$this->validate($validationRules, $validationMessages)) {
+            session()->setFlashdata('failed', $this->validator->listErrors());
+            return redirect()->back();
+
+        }
+
         $dataFoto = $this->request->getFile('foto');
 
         $dataForm = [
@@ -54,6 +79,33 @@ class ProdukController extends BaseController
 
     public function edit($id)
     {
+        $validationRules = [
+            'nama' => 'required|min_length[6]',
+            'harga' => 'required|numeric',
+            'jumlah' => 'required|numeric'
+        ];
+        $validationMessages = [
+            'nama' => [
+                'required' => 'Nama produk harus diisi.',
+                'min_length' => 'Nama produk harus memiliki minimal 6 karakter.'
+            ],
+            'harga' => [
+                'required' => 'Harga produk harus diisi.',
+                'numeric' => 'Harga produk harus berupa angka.'
+            ],
+            'jumlah' => [
+                'required' => 'Jumlah produk harus diisi.',
+                'numeric' => 'Jumlah produk harus berupa angka.'
+            ]
+        ];
+            // Perform validation
+        if (!$this->validate($validationRules, $validationMessages)) {
+            session()->setFlashdata('failed', $this->validator->listErrors());
+            return redirect()->back();
+
+        }
+
+
         $dataProduk = $this->product->find($id);
 
         $dataForm = [

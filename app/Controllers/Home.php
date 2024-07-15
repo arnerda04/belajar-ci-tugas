@@ -60,5 +60,9 @@ class Home extends BaseController
 
         return view('v_profile', $data);
     }
+    public function transaksi(): string
+    {
+        return view('v_transaksi');
+    }
 }
 

@@ -44,6 +44,13 @@
                 <span>Profile</span>
             </a>
         </li><!-- End Profile Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link <?php echo (uri_string() == 'transaksi') ? "" : "collapsed" ?>" href="transaksi">
+                <i class="bi bi-folder"></i>
+                <span>Transaksi</span>
+            </a>
+        </li><!-- End Profile Nav -->
     </ul>
 
 </aside><!-- End Sidebar-->

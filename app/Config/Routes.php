@@ -36,6 +36,7 @@ $routes->get('getcost','TransaksiController::getcost',['filter' => 'auth']);
 $routes->post('buy','TransaksiController::buy',['filter' => 'auth']);
 
 $routes->get('profile', 'Home::profile', ['filter' => 'auth']);
+$routes->get('transaksi', 'Home::transaksi', ['filter' => 'auth']);
 
 //$routes->resource('apiController');
 $routes->group('api', function ($routes) {
