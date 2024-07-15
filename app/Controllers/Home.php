@@ -60,7 +60,7 @@ class Home extends BaseController
 
         return view('v_profile', $data);
     }
-    public function transaksi(): string
+    public function transaction(): string
     {
         return view('v_transaksi');
     }

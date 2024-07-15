@@ -2,8 +2,12 @@
 
 namespace App\Controllers;
 
+use App\Controllers\BaseController;
 use App\Models\TransactionModel;
 use App\Models\TransactionDetailModel;
+use CodeIgniter\HTTP\ResponseInterface;
+
+use Dompdf\Dompdf;
 
 class TransaksiController extends BaseController
 {
@@ -74,11 +78,25 @@ class TransaksiController extends BaseController
     {
         $data['items'] = $this->cart->contents();
         $data['total'] = $this->cart->total();
+        
         $provinsi = $this->rajaongkir('province');
-		$data['provinsi'] = json_decode($provinsi)->rajaongkir->results;
+        
+        if ($provinsi) {
+            $decodedProvinsi = json_decode($provinsi);
+            if (isset($decodedProvinsi->rajaongkir->results)) {
+                $data['provinsi'] = $decodedProvinsi->rajaongkir->results;
+            } else {
+                $data['provinsi'] = []; // Set to an empty array or handle the error as needed
+                log_message('error', 'Invalid response structure from Rajaongkir API');
+            }
+        } else {
+            $data['provinsi'] = []; // Set to an empty array or handle the error as needed
+            log_message('error', 'Failed to fetch data from Rajaongkir API');
+        }
 
         return view('v_checkout', $data);
     }
+
 
     public function getCity()
     {
@@ -157,12 +175,18 @@ class TransaksiController extends BaseController
 
         curl_close($curl);
 
+        if ($err) {
+            log_message('error', 'Curl Error: ' . $err);
+            return null;
+        }
+
         return $response;
     }
-    
+
+
     public function buy()
     {
-        if ($this->request->getPost()) { 
+        if ($this->request->getPost()) {
             $dataForm = [
                 'username' => $this->request->getPost('username'),
                 'total_harga' => $this->request->getPost('total_harga'),
@@ -192,8 +216,55 @@ class TransaksiController extends BaseController
             }
 
             $this->cart->destroy();
-    
+
             return redirect()->to(base_url('profile'));
         }
     }
+
+public function transaksi()
+    {
+        $data['transaction'] = $this->transaction->findAll();
+        return view('v_transaksi', $data);
+    }
+
+    public function updateStatus()
+    {
+        $transactionId = $this->request->getPost('id');
+        $status = $this->request->getPost('status');
+
+        if ($transactionId && ($status === '0' || $status === '1')) {
+            $this->transaction->update($transactionId, ['status' => $status]);
+            session()->setFlashData('success', 'Data Berhasil Diubah');
+        } else {
+            session()->setFlashData('failed', 'Invalid request');
+        }
+
+        return redirect()->to(base_url('transaksi'));
+    }
+
+    public function downloadTransaksi()
+    {
+        $transaction = $this->transaction->findAll();
+
+        $html = view('v_transaksiPDF', ['transaction' => $transaction]);
+
+        $filename = date('y-m-d-H-i-s') . '-transaksi';
+
+        // instantiate and use the dompdf class
+        $dompdf = new Dompdf();
+
+        // load HTML content
+        $dompdf->loadHtml($html);
+
+        // (optional) setup the paper size and orientation
+        $dompdf->setPaper('A4', 'potrait');
+
+        // render html as PDF
+        $dompdf->render();
+
+        // output the generated pdf
+        $dompdf->stream($filename);
+    }
+
+
 }
